@@ -1,51 +1,65 @@
 <!DOCTYPE html>
-<html>
-	<head lang="en">
-		<meta charset="utf-8">
-		<title>title</title>
-        <link rel="stylesheet" href="style.css">
-	</head>
-	<body>
-		
+<html lang="en">
+  <head>
+    <title>asdf</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <!-- <div id="info">
+      <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Click on a sphere to toggle bloom <br>By <a href="http://github.com/Temdog007" target="_blank" rel="noopener">Temdog007</a>
+    </div> -->
 
-		<div id="info" class="">
-			<div id="content">
-				<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAn1BMVEX///82cZ4eZ5nc5OosbZyJnrF3lKzl5+nt8fV0mbnp7O5wjaUyb50lapu2v8dTgqcgX4qyxdXL2ONAbJAaZJfy8/N2mLNvk7Jjja/4+PdBeaSrucYgZZRNe6GRp7p9lanQ193Cy9NpiqZJdJehssGvu8ZghKRCdZvK0NYwY4pohZ6Qqr8saJMAXZNZgKC5xM5Ye5idtMiBlaa/xMm8zt2XUaZ1AAAGaUlEQVR4nO2dC3eiOBSAIcbatcnstEId6wttq31ou932//+2TW7AqiRotwQv9H7nzCkKRL5B7k1iIEFAEARBEARBEARBEARBEARBEARBEARBEARBECej2/JD59RiGdcR80M0HpzaDejL0Bdycmo5jUfBUJyd2i7YCApeOkgMM8GndtlMBQrD7Csq30svusswGG6uQfmr9LI7GAxBUIjmGhrBm2feVEMjGHY/ZEMNU8FOcNlQw/QaVFXHhhoaQa7rxs00NIKyq5cbaZieQRBspOGOYBMNP4MM0DzDTZpIaZzhvmDjDHOCTTPcuwY1zTLcSvQbGmW4myZSmmSYNnh3BZtkmLXof++yakwLeMjc3X7NMDwTTTe8gB5MK3xU/k8MpzIc/21jkZT/cScyZN3D25UEGXqADEuGDD1AhgfpTL+SNeto2GZsnhy9dQ0N41EY8nXr2M1raHinmibi5ejNa2i4UjV3Njt68/oZvupTuDx++/oZjtUplMPjt8dreGu3eNAHLLIxTsPbg+WgNbzgrG17f65OIc+GOLUZvzhUEFbDO3VcchHn3u9EuifA7B0v1CXJ7g6UhNTwVYuIZd6wrXbm6fHGS90fEr0WF4XTsBXlO4yBWOpUkaSvOlwrjoqTP0rDWKe8T5EtINsvNi912AnFKn+qt0BpeKt7cti9ZY3uj9vO9vdakRcGVIyG0FUlbZH0VQvtZPu27l0uDKgIDSdw0AvbKku2X8B/R8EIWXyG73BtLW3jlhN9sKvdNQMIqMw9phGdYaKjpVhZ18/5VrbP6OqwJGTiKhCbYQyd+1FiW6ePNYxyeyYR7OMKqNgMx/qyimxhNM321/n377UiHztKRGZ4Jl1hVGd7R5I0AVU6LHAZ3kF6m9v3K2jbzyGB2muouAxHOoy6bv/QEUXa2/aDMVTfrOuQGQp7fVsDbfuevUiog4s6GJqYYf8m3ha07V8K4hMuw4KYYcv2GUXxCZuhqYTZYoY12xtMfLJW8wJ8hqYSFuUCynbbfo9Z5KzmwZ7IDF2t2u22/S6tkaO1nBWIzTBt1e5VwnRPvj3bxyHUvB+c5eEzNONt9gKqO9tDGGUF/acIDYNpPqCGrp58E0anBaVhNMwHVJ3tQ1tPfnEYBVAapq3az3Pm6smfuVvLG1AaBp3RTkCFbM/zHh0IowfGUeE0DB4gx63OzStHtj+HTsfIHUYBpIYQUOWZOW1wqix7DHSYKQqjZm+khqqGugk1Otvbj/GOuWqjn6A1DObZ7xGxruXYe26CV0dreQu8hhu++Lv9PjUwDN1t+2PAbwht+/D/fxx+w6/+br8PesNkzVVS/8azSdAbBp3pKPrOo0nwG6p0MfnWOL8aGH4PMvQAGZYMGXqADEuGDD1AhiVDhh4gw5IhQw+QYcmQoQfIsGTI0AM/w9A+MsYL2tA+TsUbTxFj6woN14xFB++OIgiiccTn1VJ455cHBouRpxkCXIwW1c4cMCl4EpYnWLUzB5zxyg0rzvjwrC8PMwQ4gE+r3lD0/6qKfvUzB2jDCmveJ5g5AAyrm/rlRM/cI8MSIUMP/FTD7mOv9wiVq7laMCMv4xtDr/cbqpaJ2qb3aAbxPcBy9qjMf9SyY6wwHkMpRASGf7iQl/DeuTQPAlVrwPCK6edjmvtkJ1wtbx4GOhaCXdk/DpFhGKaGIkwNYyahhsfl2hiaB0jDuuXOpC1jtU8dDQdvb296BLT6A2vA0NwcBPd1199QMYiUR9a+04a9kD+rxaEMl3U0hKUdw3jPUEyF0Pelz7n4V9TLELo1ny4UyyJD+Uv96+jR7Vwv1cpQZm0qPSbYbfiw1JF2xsR8VkdDDs9LLjR8n3A+D9pcDj9qaCj614qbwm/pe6IS52CsSrismWFRpElvfzLXYTAK+ZCLVVBvw4/s7Xyk0fd5rULebpDh5315xnAIt43O9g0FBOKnZL/gGhqax9TE+4YmEOdrp3gMGedrWPojefRpuFZHvfmWRpwppyXn8iUILs0rYJz1rEV4Dc9VHO3D0rNa2BznQL89CMzdpK3+dV+1kYbqj2peXZlXQPs6pZ/sF4zG0Btk6IEfYtj4HmExLX3eX0TzAcMvM5X9MHOKOZ2L5pnxRMWGE49TjDuoeG71wTiq+FfuyPWANG90WtVSXWoiCIIgCIIgCIIgCIIgCIIgCIIgCIIgCIIgfjD/AVOZjrmzouhaAAAAAElFTkSuQmCC" />
-				<div id="news">
-					<h1>news title</h1>
-					<p>News is information about recent events that is shared with the public through various media channels such as newspapers...</p>
-				</div>
+	<div id="contrast">
+		<div id="btn1" style="position: inherit; display: flex; justify-content: end; width: 98%; cursor: pointer;"> X </div>
+		<div id="content">
+			<img src="data:image/png;base64,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" />
+			<div id="news">
+				<h1>contrast news title</h1>
+				<p>News is information about recent events that is shared with the public through various media channels such as newspapers...</p>
 			</div>
 		</div>
+	</div>
 
-		  
-
-		<!-- <div id="modal-bg">
-			<div id="box">
-				<div id="heading">
-					<div id="button" onclick="closeModal()" style="margin: 5px;">
-						<svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" viewBox="0 0 24 24" fill="none" class="__web-inspector-hide-shortcut__">
-							<g id="Menu / Close_MD">
-							<path id="Vector" d="M18 18L12 12M12 12L6 6M12 12L18 6M12 12L6 18" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-							</g>
-							</svg>
-					</div>
-				</div>
-				<div id="content">
-					<img src="https://ssl.pstatic.net/static.news/image/news/ogtag/navernews_stand_20160802.png" />
-					<div id="news">
-						<h1>news title</h1>
-						<p>Description</p>
-					</div>
-				</div>
-				
+	<div id="info" class="">
+		<div id="btn2" style="position: inherit; display: flex; justify-content: end; width: 98%; cursor: pointer;"> X </div>
+		<div id="content">
+			<img src="data:image/png;base64,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" />
+			<div id="news">
+				<h1>clicked news title</h1>
+				<p>News is information about recent events that is shared with the public through various media channels such as newspapers...</p>
 			</div>
-		</div> -->
+		</div>
+	</div>
 
-        <div id="app"></div>
 
-		<!-- <script type="module" src="/main.js"></script> -->
-		<script type="module" src="/a.js"></script>
-		<!-- <script type="module" src="/b.js"></script> -->
-	</body>
+	<div id="app">
+
+	</div>
+
+
+    <script type="x-shader/x-vertex" id="vertexshader"> varying vec2 vUv;
+			void main() {
+				vUv = uv;
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			}
+		</script>
+    <script type="x-shader/x-fragment" id="fragmentshader"> uniform sampler2D baseTexture;
+			uniform sampler2D bloomTexture;
+			varying vec2 vUv;
+			void main() {
+				gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( bloomTexture, vUv ) );
+			}
+		</script>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap"> {
+				"imports": {
+					"three": "../build/three.module.js",
+					"three/addons/": "./jsm/"
+				}
+			}
+		</script>
+    <script type="module" src="script.js"></script>
+  </body>
 </html>
