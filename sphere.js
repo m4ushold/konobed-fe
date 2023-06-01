@@ -26,7 +26,13 @@ const materials = {};
 
 const renderer = new THREE.WebGLRenderer( { antialias: true } );
 renderer.setPixelRatio( window.devicePixelRatio );
-renderer.setSize( window.innerWidth, window.innerHeight );
+
+// renderer.setSize( window.innerWidth, window.innerHeight );
+
+const ratio = window.innerHeight/200
+renderer.setSize( window.innerWidth/ratio, window.innerHeight/ratio );
+
+
 renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 renderer.toneMapping = THREE.ReinhardToneMapping;
 
@@ -175,10 +181,14 @@ window.onresize = function () {
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
 
-    renderer.setSize( width, height );
+    // renderer.setSize( width, height );
+    // bloomComposer.setSize( width, height );
+    // finalComposer.setSize( width, height );
 
-    bloomComposer.setSize( width, height );
-    finalComposer.setSize( width, height );
+    
+    renderer.setSize( width/ratio, height/ratio );
+    bloomComposer.setSize( width/ratio, height/ratio );
+    finalComposer.setSize( width/ratio, height/ratio );
 
     render();
 

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link type="text/css" rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="nav">
+        <p>KoNoBed</p>
+
+        <div class="searchbox">
+            <input onkeyup="filter()" type="text" id="search-word" placeholder="Type to Search">
+        </div>
+    </div>
+    
+    <div id="recommended-subjects"></div>
+    
+    <div class="sphere" onclick="location.href='/shpere.html'">
+        visuallize
+    </div>
+
+    <div clsas="subject-screen">
+        <h1>subject screen</h1>
+        <div class="news-container">
+            <div class="news entailment">
+                <div class="title">
+                    <h3>entailment news title1</h3>
+                </div>
+                <div class="content">News is information about recent events that is shared with the public through various media channels such as newspapers...</div>
+            </div>
+            
+            <div class="news neutral">
+                <div class="title">
+                    <h3>neutral news title2</h3>
+                </div>
+                <div class="content">News is information about recent events that is shared with the public through various media channels such as newspapers...</div>
+            </div>
+            
+            <div class="news contradiction">
+                <div class="title">
+                    <h3>contradiction news title3</h3>
+                </div>
+                <div class="content">News is information about recent events that is shared with the public through various media channels such as newspapers...</div>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
