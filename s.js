@@ -218,16 +218,15 @@ function calculateDistance(pos1, pos2, radius = 1) {
     const distance = radius * centralAngle;
   
     return distance;
-  }
-  
-  // Helper function to convert Cartesian coordinates to spherical coordinates
-  function cartesianToSpherical(x, y, z) {
-    const radius = Math.sqrt(x ** 2 + y ** 2 + z ** 2);
-    const latitude = Math.asin(z / radius) * (180 / Math.PI);
-    const longitude = Math.atan2(y, x) * (180 / Math.PI);
-    return [latitude, longitude];
-  }
-  
+}
+
+// Helper function to convert Cartesian coordinates to spherical coordinates
+function cartesianToSpherical(x, y, z) {
+const radius = Math.sqrt(x ** 2 + y ** 2 + z ** 2);
+const latitude = Math.asin(z / radius) * (180 / Math.PI);
+const longitude = Math.atan2(y, x) * (180 / Math.PI);
+return [latitude, longitude];
+}
 
 function calcColor(pos) {
     let dist = []
@@ -252,34 +251,12 @@ function setupScene() {
 
     const geometry = new THREE.IcosahedronGeometry( 0.02, 15 );
 
-
-    let pointsPos = [[1, 1, 1], [-1, -1, 1], [1, -1, -1], [-1, 1, -1]]
-
-    for (let i of pointsPos) {
-        const m = new THREE.MeshBasicMaterial( { color: calcColor(i) } );
-        const s = new THREE.Mesh( geometry, m );
-
-        i = normalize(i)
-
-        s.position.x = i[0];
-        s.position.y = i[1];
-        s.position.z = i[2];
-        scene.add( s );
-    }
-
-    for ( let i = 0; i < 300; i ++ ) {
+    for ( let i = 0; i < 100; i ++ ) {
 
         // const color = new THREE.Color();
         // color.setHSL( Math.random(), 0.7, Math.random() * 0.2 + 0.05 );
 
-
-        let radius = 1;
-        let x = Math.random()*radius*2-radius;
-        let y = (radius*radius-x*x);
-        y = Math.random() * y * 2 - y;
-        while (x*x+y*y >= radius*radius) y = THREE.MathUtils.randFloatSpread( radius*2 );
-        let z = Math.sqrt(radius*radius-x*x-y*y)
-        if (Math.random() > 0.5) z = -z
+        let [x, y, z] = normalize([Math.random() * 10 - 5, Math.random() * 10 - 5, Math.random() * 10 - 5])
 
         const material = new THREE.MeshBasicMaterial( { color: calcColor([x, y, z]) } );
         const sphere = new THREE.Mesh( geometry, material );

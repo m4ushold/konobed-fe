@@ -55,4 +55,11 @@ function test() {
     for (let i =0;i<10;i++) addNews(i);
 }
 
+
+function normalize(pos) {
+    let norm = Math.sqrt(pos[0]*pos[0] + pos[1]*pos[1] + pos[2]*pos[2])
+    return [pos[0]/norm, pos[1]/norm, pos[2]/norm]
+}
+
+
 test()

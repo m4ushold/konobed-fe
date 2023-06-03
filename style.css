@@ -3,13 +3,15 @@ body {
     overflow-x: hidden;
     
     margin: 0;
+    background-color: #1a1a1a;
+    color: white;
 }
 
 #contrast {
     position: absolute;
 	/* z-index: 100;
 	display:block;
-    border: 1px black solid;
+    border: 1px white solid;
 
     height: 100px;
 	width: 200px;
@@ -37,7 +39,7 @@ body {
 	position: absolute;
 	/* z-index: 100;
 	display:block;
-    border: 1px black solid;
+    border: 1px white solid;
 
     height: 100px;
 	width: 200px;
@@ -151,11 +153,11 @@ body {
 }
 
 .b {
-    border: 1px black solid;
+    border: 1px white solid;
 }
 
 .recommandation {
-    border: 1px black solid;
+    border: 1px white solid;
 }
 
 .news-container {
@@ -245,7 +247,7 @@ body {
 
 .news-card {
     margin-bottom: 20px;
-    border: 1px black solid;
+    border: 1px white solid;
     display: flex;
 }
 
@@ -286,7 +288,7 @@ body {
 }
 
 #search-icon {
-    border: 1px solid black;
+    border: 1px solid white;
     border-radius: 0.3rem;
     box-shadow: 1px 1px 1px gray;
 }
@@ -320,13 +322,32 @@ body {
     box-shadow: 1px 1px 1px gray;
 }
 
+.zoom-icon:hover {
+    cursor: pointer;
+}
+
 .zoom-icon>svg {
     padding: 5px;
     width: 30px;
     height: 30px;
 }
 
-/* #app {
+#app {
     position: fixed;
-    right: 100px;
+    top: 200px;
+    right: 3rem;
+}
+
+/* #app>canvas {
+    
+    position: relative;
+    left: 0;
+    top: 0;
 } */
+
+#app > canvas:hover {
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+    transform: scale(1.1, 1.1);
+}
