@@ -332,14 +332,13 @@ function animate() {
 	// composer.render();
 }
 
-
 animate();
 
 function onCheckboxClicked(e, idx) {
     let checkbox = e.target
 
     if (embeddingObjects.length > 0) {
-        // controls.target.copy( embeddingObjects[idx].position );
+        // controls.target = embeddingObjects[idx].position;
 
         embeddingObjects[idx].layers.toggle( BLOOM_SCENE );
         render();
