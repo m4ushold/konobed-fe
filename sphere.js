@@ -27,10 +27,7 @@ const materials = {};
 const renderer = new THREE.WebGLRenderer( { antialias: true } );
 renderer.setPixelRatio( window.devicePixelRatio );
 
-// renderer.setSize( window.innerWidth, window.innerHeight );
-
-const ratio = window.innerHeight/150
-renderer.setSize( window.innerWidth/ratio, window.innerHeight/ratio );
+renderer.setSize( window.innerWidth, window.innerHeight );
 
 
 renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
@@ -38,6 +35,36 @@ renderer.toneMapping = THREE.ReinhardToneMapping;
 
 const app = document.getElementById('app')
 app.appendChild(renderer.domElement);
+
+const modalBg = document.getElementById('modal-bg')
+
+const ratio = window.innerHeight/150;
+renderer.domElement.style.width = `${window.innerWidth/ratio}px`
+renderer.domElement.style.height = `${window.innerHeight/ratio}px`
+
+const windowReduceSize = 200
+
+renderer.domElement.addEventListener('click', (e)=> {
+    renderer.domElement.style.position = 'fixed'
+    renderer.domElement.style.top = `${windowReduceSize/2}px`
+    renderer.domElement.style.left = `${windowReduceSize/2}px`
+    renderer.domElement.style.width = `${window.innerWidth-windowReduceSize}px`
+    renderer.domElement.style.height = `${window.innerHeight-windowReduceSize}px`
+
+    modalBg.style.display = 'block'
+})
+
+document.addEventListener('click', (e)=> {
+    if (e.target != renderer.domElement) {
+        renderer.domElement.style.position = 'relative'
+        renderer.domElement.style.top = `0px`
+        renderer.domElement.style.left = `0px`
+        renderer.domElement.style.width = `${window.innerWidth/ratio}px`
+        renderer.domElement.style.height = `${window.innerHeight/ratio}px`
+
+        modalBg.style.display = 'none'
+    }
+})
 
 const desc = document.getElementById('info')
 const contrast = document.getElementById('contrast')
@@ -121,9 +148,9 @@ setupScene();
 let selectedObject;
 let clicked = false;
 
-function onMouseMove(event) {
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+function onMouseMove(event) {    
+    mouse.x = ((event.offsetX)/( renderer.domElement.clientWidth )) * 2 - 1;
+    mouse.y = -((event.offsetY)/( renderer.domElement.clientHeight )) * 2 + 1;
 
     raycaster.setFromCamera( mouse, camera );
     const intersects = raycaster.intersectObjects( scene.children, false );
@@ -152,8 +179,8 @@ function onMouseMove(event) {
     }
 }
 function onPointerDown( event ) {
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    mouse.x = ((event.offsetX)/( renderer.domElement.clientWidth )) * 2 - 1;
+    mouse.y = -((event.offsetY)/( renderer.domElement.clientHeight )) * 2 + 1;
 
     raycaster.setFromCamera( mouse, camera );
     const intersects = raycaster.intersectObjects( scene.children, false );
@@ -194,9 +221,9 @@ window.onresize = function () {
     // finalComposer.setSize( width, height );
 
     
-    renderer.setSize( width/ratio, height/ratio );
-    bloomComposer.setSize( width/ratio, height/ratio );
-    finalComposer.setSize( width/ratio, height/ratio );
+    renderer.setSize( width, height );
+    bloomComposer.setSize( width, height );
+    finalComposer.setSize( width, height );
 
     render();
 
@@ -533,6 +560,3 @@ function repeat() {
 
 repeat();
 
-function zoom() {
-
-}
