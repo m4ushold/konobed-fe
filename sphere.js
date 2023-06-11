@@ -66,14 +66,6 @@ document.addEventListener('click', (e)=> {
     }
 })
 
-const desc = document.getElementById('info')
-const contrast = document.getElementById('contrast')
-
-const btn1 = document.getElementById('btn1');
-const btn2 = document.getElementById('btn2');
-
-btn1.addEventListener('click', hide);
-btn2.addEventListener('click', hide);
 
 const scene = new THREE.Scene();
 // scene.background = new THREE.Color(0xfffae5) // set backgournd color
@@ -125,8 +117,9 @@ const raycaster = new THREE.Raycaster();
 
 const mouse = new THREE.Vector2();
 
-window.addEventListener( 'pointerdown', onPointerDown );
-window.addEventListener( 'mousemove', onMouseMove );
+// renderer.domElement.addEventListener( 'pointerdown', onPointerDown );
+renderer.domElement.addEventListener( 'click', onclick );
+renderer.domElement.addEventListener('mousemove', onMouseMove);
 
 const radius = 1;
 const sphereGeometry = new THREE.SphereGeometry( radius, 128, 128 ); 
@@ -141,12 +134,13 @@ const colorAxis = [[1, 1, 1], [-1, -1, 1], [1, -1, -1], [-1, 1, -1]]
 const referenceColor = [[204, 102, 102], [153, 204, 102], [102, 204, 204], [153, 102, 204]]
 const maxDist = 1.9106332362490184
 
-const embeddings = getEmbeddings()
+// const embeddings = getEmbeddings()
+const embeddings = []
+const embeddingRange = []
 
 setupScene();
 
 let selectedObject;
-let clicked = false;
 
 function onMouseMove(event) {    
     mouse.x = ((event.offsetX)/( renderer.domElement.clientWidth )) * 2 - 1;
@@ -163,49 +157,76 @@ function onMouseMove(event) {
             
             app.style.cursor = 'pointer';
 
-            desc.style.visibility = 'visible';
-            desc.style.top = `${event.clientY - 30}px`;
-            desc.style.left = `${event.clientX + 40}px`;
-            desc.classList.add('zoom');
         }
-    } else if (clicked == false){
-        selectedObject.layers.toggle( BLOOM_SCENE );
+    } else {
+        if (selectedObject != null) selectedObject.layers.toggle( BLOOM_SCENE );
         selectedObject = null;
         app.style.cursor = 'auto';
         
-
-        desc.style.visibility = 'hidden';
-        desc.classList.remove('zoom');
     }
 }
-function onPointerDown( event ) {
+
+function onclick(event) { // scroll to the news coresspoding to embedding
     mouse.x = ((event.offsetX)/( renderer.domElement.clientWidth )) * 2 - 1;
     mouse.y = -((event.offsetY)/( renderer.domElement.clientHeight )) * 2 + 1;
 
     raycaster.setFromCamera( mouse, camera );
     const intersects = raycaster.intersectObjects( scene.children, false );
-    if ( intersects.length > 0 && intersects[0].object != sphere) {
-        clicked = true;
 
-        contrast.style.visibility = 'visible';
-        contrast.style.top = `${event.clientY - 330}px`;
-        contrast.style.left = `${event.clientX + 45}px`;
-        contrast.classList.add('up');
+    if ( intersects.length > 0 && intersects[0].object != sphere) { // if embedding clicked
+        let idx = getObjectIdx(intersects[0].object);
+
+        if (event.detail === 1) { // single click    
+            scrollToNews(idx);
+        } else if (event.detail === 2) { // double click
+            checkNewsCheckBox(idx);
+        }
     }
 }
 
-function hide() {
-    clicked = false;
-    selectedObject.layers.toggle( BLOOM_SCENE );
-    render();
+function getObjectIdx(obj) {
+    let idx = embeddingObjects.indexOf(obj);
+    let cnt = 0
+    while(idx > embeddingRange[cnt][1]) cnt++
+    return cnt;
+}
 
-    desc.style.visibility = 'hidden';
-    contrast.style.visibility = 'hidden';
+function scrollToNews(idx) {
+    console.log('scrolling to ', idx)
 
-    desc.classList.remove('zoom');
-    contrast.classList.remove('up');
+    let newsCard = document.getElementsByClassName('news-card')[idx].children[0]
 
-    selectedObject = null;
+    // console.log()
+    
+    
+    let [x, y] = [newsCard.getBoundingClientRect()['x'], newsCard.getBoundingClientRect()['y']]
+    window.scrollTo({
+        top: y,
+        left: x,
+        behavior: 'smooth'
+    })
+    if (idx == 5) {
+        console.log(document.body.scrollHeight)
+        console.log(y)
+    }
+
+    if (embeddingObjects.length > 0) {
+        for (let i = embeddingRange[idx][0]; i<=embeddingRange[idx][1];i++) embeddingObjects[i].layers.toggle( BLOOM_SCENE );
+        render();
+    }
+
+}
+
+function checkNewsCheckBox(idx) {
+    console.log('check ', idx)
+    let checkbox = document.getElementsByClassName('check-box')[idx].children[0]
+
+    // if (embeddingObjects.length > 0) {
+    //     for (let i = embeddingRange[idx][0]; i<=embeddingRange[idx][1];i++) embeddingObjects[i].layers.toggle( BLOOM_SCENE );
+    //     render();
+    // }
+    if (checkbox.style.fill == '' || checkbox.style.fill == 'white') checkbox.style.fill = '#f00'
+    else checkbox.style.fill = 'white'
 }
 
 window.onresize = function () {
@@ -219,7 +240,6 @@ window.onresize = function () {
     // renderer.setSize( width, height );
     // bloomComposer.setSize( width, height );
     // finalComposer.setSize( width, height );
-
     
     renderer.setSize( width, height );
     bloomComposer.setSize( width, height );
@@ -285,8 +305,10 @@ function calcColor(pos) {
         for (let j=0;j<3;j++) color[j] += referenceColor[i][j]*(maxDist - dist[i])
     }
 
-    color = [Math.ceil(color[0]/4), Math.ceil(color[1]/4), Math.ceil(color[2]/4)]
+    return [Math.ceil(color[0]/4), Math.ceil(color[1]/4), Math.ceil(color[2]/4)]
+}
 
+function colorToString(color) {
     return '#' + color[0].toString(16).padStart(2, '0') + color[1].toString(16).padStart(2, '0') + color[2].toString(16).padStart(2, '0')
 }
 
@@ -300,11 +322,9 @@ function setupScene() {
     const geometry = new THREE.IcosahedronGeometry( 0.02, 15 );    
 
     for ( let i = 0; i < embeddings.length; i ++ ) {
-
-
         let [x, y, z] = embeddings[i]
         
-        const material = new THREE.MeshBasicMaterial( { color: calcColor(embeddings[i]) } );
+        const material = new THREE.MeshBasicMaterial( { color: colorToString(calcColor(embeddings[i])) } );
         const sphere = new THREE.Mesh( geometry, material );
 
         sphere.position.x = x;
@@ -316,6 +336,24 @@ function setupScene() {
     }
 
     render();
+}
+
+function addEmbeddingsToSence(em) {
+    const geometry = new THREE.IcosahedronGeometry( 0.02, 15 );    
+
+    for ( let i = 0; i < em.length; i ++ ) {
+        let [x, y, z] = em[i]
+        
+        const material = new THREE.MeshBasicMaterial( { color: colorToString(calcColor(em[i])) } );
+        const sphere = new THREE.Mesh( geometry, material );
+
+        sphere.position.x = x;
+        sphere.position.y = y;
+        sphere.position.z = z;
+        
+        scene.add( sphere );
+        embeddingObjects.push(sphere)
+    }
 }
 
 function disposeMaterial( obj ) {
@@ -367,31 +405,38 @@ function onCheckboxClicked(e, idx) {
     if (embeddingObjects.length > 0) {
         // controls.target = embeddingObjects[idx].position;
 
-        embeddingObjects[idx].layers.toggle( BLOOM_SCENE );
+        for (let i = embeddingRange[idx][0]; i<=embeddingRange[idx][1];i++) embeddingObjects[i].layers.toggle( BLOOM_SCENE );
         render();
     }
     
-    let c = calcColor(embeddings[idx])
-    let co = [parseInt(c.substring(1, 3), 16), parseInt(c.substring(3, 5), 16), parseInt(c.substring(5, 7), 16)]
-    let col = changeColorByLuminosity(co, 0.3)
-    let colo = '#' + col[0].toString(16).padStart(2, '0') + col[1].toString(16).padStart(2, '0') + col[2].toString(16).padStart(2, '0')
+    // let c = [0,0,0]
+    // for (let i=embeddingRange[idx][0]; i<embeddingRange[idx][1];i++)  {
+    //     let cc = calcColor(embeddings[i])
+    //     for (elt)
+    // }
+    // calcColor(embeddings[idx])
     
-    if (checkbox.style.fill == '' || checkbox.style.fill == 'white') checkbox.style.fill = colo
+    // let co = [parseInt(c.substring(1, 3), 16), parseInt(c.substring(3, 5), 16), parseInt(c.substring(5, 7), 16)]
+    // let col = changeColorByLuminosity(co, 0.3)
+    // let colo = '#' + col[0].toString(16).padStart(2, '0') + col[1].toString(16).padStart(2, '0') + col[2].toString(16).padStart(2, '0')
+    
+    if (checkbox.style.fill == '' || checkbox.style.fill == 'white') checkbox.style.fill = '#f00'
     else checkbox.style.fill = 'white'
 }
 
 function processBold(data) {
     let res = ''
     let idx = 0
+    
+    if (data == null) return;
 
-    for (let i =0;i<data['bold'].length; i++) {
+    for (let i =0;i<Math.min(data['bold'].length, data['embedding'].length); i++) {
         let b = data['bold'][i]
         if (idx < b[0]) res += data['content'].substring(idx, b[0])
         
         let c = calcColor(data['embedding'][i])
-        let co = [parseInt(c.substring(1, 3), 16), parseInt(c.substring(3, 5), 16), parseInt(c.substring(5, 7), 16)]
-        let col = changeColorByLuminosity(co, 0.3)
-        let colo = '#' + col[0].toString(16).padStart(2, '0') + col[1].toString(16).padStart(2, '0') + col[2].toString(16).padStart(2, '0')
+        let col = changeColorByLuminosity(c, 0.3)
+        let colo = colorToString(col)
 
         res += `<b style="color:${colo}">`+data['content'].substring(b[0],b[0]+b[1])+'</b>'
         idx = b[0] + b[1]
@@ -502,14 +547,6 @@ function addNews(data, idx) {
     newsContent.classList.add('news-content')
     newsContent.innerHTML = data['content']
 
-
-    // let json = {[
-    //     'title': '',
-    //     'content': '',
-    //     'embedding': [],
-    //     'bold': [(idx, length)]
-    // ]}
-
     news.appendChild(newsTitle)
     news.appendChild(newsContent)
 
@@ -533,24 +570,27 @@ function query(searchWord) {
         qreviousSearchWord = searchWord
 
         // query to server
-        fetch(`https://cors-anywhere.herokuapp.com/https://5f5c-58-233-13-194.ngrok-free.app/query?q=${searchWord}`)
+        fetch(`https://cors-anywhere.herokuapp.com/https://064c-58-233-13-194.ngrok-free.app/query?q=${searchWord}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data)
+            console.log('data: ', data)
             document.getElementById('news-container').innerHTML = ''
-
-            
 
             addResultCnt(data.length);
 
-            for (let i=0; data.length ; i++) {
+            for (let i=0; i<data.length ; i++) {
                 data[i]['content'] = processBold(data[i])
                 addNews(data[i], i)
+                addEmbeddingsToSence(data[i]['embedding']);
+                embeddingRange.push([embeddings.length, embeddings.length + data[i]['embedding'].length-1])
+                for (let j of data[i]['embedding']) embeddings.push(j)
             }
-
+            
+            render();
+  
         });
 
-        console.log(searchWord)
+        console.log(searchWord, 'searching...')
     }
 }
 function repeat() {
