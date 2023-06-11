@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KoNoBed</title>
+
+    
+
+    <script type="importmap"> {
+				"imports": {
+					"three": "../build/three.module.js",
+					"three/addons/": "./jsm/"
+				}
+			}
+    </script>
+  <script type="module" crossorigin src="/assets/index-deb26242.js"></script>
+  <link rel="stylesheet" href="/assets/index-f80d9bb8.css">
+</head>
+<body>
+    <div id="modal-bg"></div>
+
+    <div class="header">
+        <h1>NoBe Search Engine</h1>
+    </div>
+
+
+    <div class="searchbox">
+        <input type="text" id="search-word" placeholder="Type to Search">
+        <div id="search-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 24 24" fill="white">
+                <path opacity="0.1" d="M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" fill="#323232"/>
+                <path d="M15 15L21 21" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="#323232" stroke-width="2"/>
+            </svg>
+        </div>
+    </div>    
+
+    <div id="container">
+        <div id="news-container"></div>
+        <div id="app"></div>
+    </div>
+    
+
+    <script type="x-shader/x-vertex" id="vertexshader"> varying vec2 vUv;
+			void main() {
+				vUv = uv;
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			}
+		</script>
+    <script type="x-shader/x-fragment" id="fragmentshader"> uniform sampler2D baseTexture;
+			uniform sampler2D bloomTexture;
+			varying vec2 vUv;
+			void main() {
+				gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( bloomTexture, vUv ) );
+			}
+		</script>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+
+    
+    
+</body>
+</html>
