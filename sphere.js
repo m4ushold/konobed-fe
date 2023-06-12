@@ -194,21 +194,14 @@ function getObjectIdx(obj) {
 function scrollToNews(idx) {
     console.log('scrolling to ', idx)
 
-    let newsCard = document.getElementsByClassName('news-card')[idx].children[0]
-
-    // console.log()
-    
+    let newsCard = document.getElementsByClassName('news-card')[idx].children[0]    
     
     let [x, y] = [newsCard.getBoundingClientRect()['x'], newsCard.getBoundingClientRect()['y']]
     window.scrollTo({
-        top: y,
+        top: Math.max(0, y-100),
         left: x,
         behavior: 'smooth'
     })
-    if (idx == 5) {
-        console.log(document.body.scrollHeight)
-        console.log(y)
-    }
 
     if (embeddingObjects.length > 0) {
         for (let i = embeddingRange[idx][0]; i<=embeddingRange[idx][1];i++) embeddingObjects[i].layers.toggle( BLOOM_SCENE );
@@ -229,25 +222,25 @@ function checkNewsCheckBox(idx) {
     else checkbox.style.fill = 'white'
 }
 
-window.onresize = function () {
+// window.onresize = function () {
 
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+//     const width = window.innerWidth;
+//     const height = window.innerHeight;
 
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
+//     camera.aspect = width / height;
+//     camera.updateProjectionMatrix();
 
-    // renderer.setSize( width, height );
-    // bloomComposer.setSize( width, height );
-    // finalComposer.setSize( width, height );
+//     // renderer.setSize( width, height );
+//     // bloomComposer.setSize( width, height );
+//     // finalComposer.setSize( width, height );
     
-    renderer.setSize( width, height );
-    bloomComposer.setSize( width, height );
-    finalComposer.setSize( width, height );
+//     renderer.setSize( width, height );
+//     bloomComposer.setSize( width, height );
+//     finalComposer.setSize( width, height );
 
-    render();
+//     render();
 
-};
+// };
 
 
 function normalize(pos) {
@@ -570,7 +563,7 @@ function query(searchWord) {
         qreviousSearchWord = searchWord
 
         // query to server
-        fetch(`https://cors-anywhere.herokuapp.com/https://064c-58-233-13-194.ngrok-free.app/query?q=${searchWord}`)
+        fetch(`/api/query?q=${searchWord}`)
         .then(response => response.json())
         .then(data => {
             console.log('data: ', data)
